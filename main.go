@@ -1,9 +1,9 @@
 package main
 
 import (
-  "github.com/20kdc/CCUpdaterUI/design"
-  "github.com/20kdc/CCUpdaterUI/frenyard"
-  "github.com/20kdc/CCUpdaterUI/frenyard/framework"
+	"github.com/20kdc/CCUpdaterUI/design"
+	"github.com/20kdc/CCUpdaterUI/frenyard"
+	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
 	"github.com/Cumcord/impregnate/src"
 )
 
@@ -19,18 +19,19 @@ func main() {
 	wnd.SetSize(design.SizeWindow)
 	// Ok, now get it ready.
 	app := (&src.UpApplication{
-		MainContainer: slideContainer,
-		Window: wnd,
-		UpQueued: make(chan func(), 16),
+		MainContainer:    slideContainer,
+		Window:           wnd,
+		UpQueued:         make(chan func(), 16),
 		TeleportSettings: framework.SlideTransition{},
 	})
+	app.ShowPrimaryView()
 	// Started!
 	frenyard.GlobalBackend.Run(func(frameTime float64) {
 		select {
-			case fn := <- app.UpQueued:
+		case fn := <-app.UpQueued:
 
-				fn()
-			default:
+			fn()
+		default:
 		}
 	})
 }
