@@ -16,7 +16,15 @@ func (app *UpApplication) ShowPrimaryView() {
 	})
 
 	app.Teleport(design.LayoutDocument(design.Header{
-		Title: "Impregnate",
+		Title:       "Impregnate",
+		ForwardIcon: design.MenuIconID,
+		Forward: func() {
+			app.GSRightwards()
+			app.ShowOptionsMenu(func() {
+				app.GSLeftwards()
+				app.ShowPrimaryView()
+			})
+		},
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots:       slots,
