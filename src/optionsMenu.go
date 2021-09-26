@@ -8,6 +8,11 @@ import (
 )
 
 func (app *UpApplication) ShowOptionsMenu(back framework.ButtonBehavior) {
+	backHere := func() {
+		app.GSLeftwards()
+		app.ShowOptionsMenu(back)
+	}
+
 	listSlots := []framework.FlexboxSlot{
 		{
 			Element: design.ListItem(design.ListItemDetails{
@@ -15,6 +20,7 @@ func (app *UpApplication) ShowOptionsMenu(back framework.ButtonBehavior) {
 				Subtext: "See who is behind Impregnate and related",
 				Click: func() {
 					app.GSRightwards()
+					app.ShowCredits(backHere)
 				},
 			}),
 		},
