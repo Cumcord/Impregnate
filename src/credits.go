@@ -1,8 +1,8 @@
 package src
 
 import (
-	"github.com/20kdc/CCUpdaterUI/design"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
+	"github.com/yellowsink/frenyard/design"
+	"github.com/yellowsink/frenyard/framework"
 )
 
 func (app *UpApplication) ShowCredits(back framework.ButtonBehavior) {
