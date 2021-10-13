@@ -1,8 +1,8 @@
 package src
 
 import (
-	"github.com/yellowsink/frenyard"
-	"github.com/yellowsink/frenyard/framework"
+	"github.com/lexisother/frenyard"
+	"github.com/lexisother/frenyard/framework"
 )
 
 // Code in this file was taken from CCUpdaterUI/main.go

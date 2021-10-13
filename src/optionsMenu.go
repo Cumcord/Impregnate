@@ -3,8 +3,8 @@ package src
 import (
 	"runtime"
 
-	"github.com/yellowsink/frenyard/design"
-	"github.com/yellowsink/frenyard/framework"
+	"github.com/lexisother/frenyard/design"
+	"github.com/lexisother/frenyard/framework"
 )
 
 func (app *UpApplication) ShowOptionsMenu(back framework.ButtonBehavior) {

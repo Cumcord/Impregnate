@@ -1,8 +1,8 @@
 package src
 
 import (
-	"github.com/yellowsink/frenyard/design"
-	"github.com/yellowsink/frenyard/framework"
+	"github.com/lexisother/frenyard/design"
+	"github.com/lexisother/frenyard/framework"
 )
 
 func (app *UpApplication) ShowCredits(back framework.ButtonBehavior) {

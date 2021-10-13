@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/Cumcord/impregnate/src"
-	"github.com/yellowsink/frenyard"
-	"github.com/yellowsink/frenyard/design"
-	"github.com/yellowsink/frenyard/framework"
+	"github.com/lexisother/frenyard"
+	"github.com/lexisother/frenyard/design"
+	"github.com/lexisother/frenyard/framework"
 )
 
 func main() {
