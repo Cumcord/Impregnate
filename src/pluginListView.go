@@ -72,6 +72,10 @@ func (app *UpApplication) ShowPluginListView() {
 
 	app.Teleport(design.LayoutDocument(design.Header{
 		Title: "Plugins",
+		Forward: func() {
+			app.GSRightwards()
+			app.ShowPrimaryView()
+		},
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots:       slots,
