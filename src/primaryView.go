@@ -59,6 +59,10 @@ func (app *UpApplication) ShowPrimaryView() {
 				app.ShowPrimaryView()
 			})
 		},
+		Back: func() {
+			app.GSLeftwards()
+			app.ShowPluginListView()
+		},
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots:       slots,
