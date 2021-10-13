@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/20kdc/CCUpdaterUI/design"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
 	"github.com/Cumcord/impregnate/src"
+	"github.com/lexisother/frenyard"
+	"github.com/lexisother/frenyard/design"
+	"github.com/lexisother/frenyard/framework"
 )
 
 func main() {

@@ -1,10 +1,10 @@
 package src
 
 import (
-	"github.com/20kdc/CCUpdaterUI/design"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
-	"github.com/20kdc/CCUpdaterUI/frenyard/integration"
+	"github.com/lexisother/frenyard"
+	"github.com/lexisother/frenyard/design"
+	"github.com/lexisother/frenyard/framework"
+	"github.com/lexisother/frenyard/integration"
 )
 
 func (app *UpApplication) ShowPrimaryView() {

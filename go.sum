@@ -1,14 +1,9 @@
-github.com/20kdc/CCUpdaterUI v0.0.0-20210313044331-b5003a3949b9 h1:D8X399qvVKP7dZA52GeE7ZVQ1FED8b98v73OLF0woNA=
-github.com/20kdc/CCUpdaterUI v0.0.0-20210313044331-b5003a3949b9/go.mod h1:FjVOWIPoa/8Vyjua7Huvdb54kVPv3vaPVgCWTlgFkoY=
-github.com/CCDirectLink/CCUpdaterCLI v1.2.1-0.20191206165254-1897428c31cd h1:/VaLXtXq9yQJanbSiQ7GTPsEnswr8tJVjyOgIIuEyyM=
-github.com/CCDirectLink/CCUpdaterCLI v1.2.1-0.20191206165254-1897428c31cd/go.mod h1:Bi+5894cVSBQwxQ+whOZbIGaaBxrBF3oSJVSpOxSlcQ=
-github.com/Masterminds/semver v1.4.2/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
-github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3QEww=
-github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 h1:DACJavvAHhabrF08vX0COfcOBJRhZ8lUbR+ZWIs0Y5g=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/veandco/go-sdl2 v0.4.10 h1:8QoD2bhWl7SbQDflIAUYWfl9Vq+mT8/boJFAUzAScgY=
 github.com/veandco/go-sdl2 v0.4.10/go.mod h1:OROqMhHD43nT4/i9crJukyVecjPNYYuCofep6SNiAjY=
+github.com/lexisother/frenyard v0.0.0-20211007210511-35c4b1aaa2af h1:69uZhGBpAaP+1ehbmPIRGd7pi1jgh7JVjE3NAqz1wao=
+github.com/lexisother/frenyard v0.0.0-20211007210511-35c4b1aaa2af/go.mod h1:Er0/ILdkLxNPp3JMm4t8iQ5c4dj3peMPX2Y5zWQSjfY=
 golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d h1:RNPAfi2nHY7C2srAV8A49jpsYr0ADedCk1wq6fTMTvs=
 golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d/go.mod h1:023OzeP/+EPmXeapQh35lcL3II3LrY8Ic+EFFKVhULM=
 golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
