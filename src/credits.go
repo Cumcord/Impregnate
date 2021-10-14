@@ -15,6 +15,14 @@ func (app *UpApplication) ShowCredits(back framework.ButtonBehavior) {
 			Text:    "Creatable",
 			Subtext: "Creator of Cumcord, God of Cum.",
 		},
+		{
+			Text:    "Yellowsink",
+			Subtext: "Better to cum in the sink, than to sink in the cum.",
+		},
+		{
+			Text:    "20kdc",
+			Subtext: "Thank you for building this great framework.",
+		},
 	}
 
 	listSlots := []framework.FlexboxSlot{}
