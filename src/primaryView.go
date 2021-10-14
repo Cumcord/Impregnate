@@ -45,6 +45,30 @@ func (app *UpApplication) ShowPrimaryView() {
 			}),
 		},
 		{
+			Basis:  frenyard.Scale(design.DesignScale, 32),
+			Shrink: 1,
+		},
+		{
+			Element: framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
+				DirVertical: false,
+				Slots: []framework.FlexboxSlot{
+					{
+						Grow: 1,
+					},
+					{
+						Element: design.ButtonAction(design.ThemeUpdateActionButton, "Plugins", func() {
+							app.GSLeftwards()
+							app.ShowPluginListView()
+						}),
+						Shrink: 1,
+					},
+					{
+						Grow: 1,
+					},
+				},
+			}),
+		},
+		{
 			Grow: 1,
 		},
 	}
@@ -58,10 +82,6 @@ func (app *UpApplication) ShowPrimaryView() {
 				app.GSLeftwards()
 				app.ShowPrimaryView()
 			})
-		},
-		Back: func() {
-			app.GSLeftwards()
-			app.ShowPluginListView()
 		},
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
