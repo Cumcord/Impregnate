@@ -62,8 +62,8 @@ func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin s
 	})
 
 	app.Teleport(design.LayoutDocument(design.Header{
-		Title:   plugin.Plugin.Name,
-		Forward: back,
+		Title: plugin.Plugin.Name,
+		Back:  back,
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots:       slots,
