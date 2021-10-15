@@ -45,6 +45,10 @@ func getPluginViewPluginList() []struct {
 }
 
 func (app *UpApplication) ShowPrimaryView() {
+	if app.CachedPrimaryView != nil {
+		app.Teleport(app.CachedPrimaryView)
+		return
+	}
 
 	slots := []framework.FlexboxSlot{}
 
@@ -71,7 +75,7 @@ func (app *UpApplication) ShowPrimaryView() {
 		Grow:    1,
 	})
 
-	app.Teleport(design.LayoutDocument(design.Header{
+	app.CachedPrimaryView = design.LayoutDocument(design.Header{
 		Title:       "Plugins",
 		ForwardIcon: design.MenuIconID,
 		Forward: func() {
@@ -84,5 +88,7 @@ func (app *UpApplication) ShowPrimaryView() {
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots:       slots,
-	}), true))
+	}), true)
+
+	app.Teleport(app.CachedPrimaryView)
 }
