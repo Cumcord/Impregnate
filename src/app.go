@@ -1,6 +1,7 @@
 package src
 
 import (
+	"github.com/Cumcord/impregnate/middle"
 	"github.com/lexisother/frenyard"
 	"github.com/lexisother/frenyard/framework"
 )
@@ -8,6 +9,7 @@ import (
 // Code in this file was taken from CCUpdaterUI/main.go
 
 type UpApplication struct {
+	Config            middle.Config
 	MainContainer     *framework.UISlideTransitionContainer
 	Window            frenyard.Window
 	UpQueued          chan func()
