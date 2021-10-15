@@ -24,7 +24,7 @@ func main() {
 		UpQueued:         make(chan func(), 16),
 		TeleportSettings: framework.SlideTransition{},
 	})
-	app.ShowPrimaryView()
+	app.ShowPreface()
 	// Started!
 	frenyard.GlobalBackend.Run(func(frameTime float64) {
 		select {

@@ -9,10 +9,7 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin struct {
-	string
-	api.Plugin
-}) {
+func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin api.Plugin) {
 	slots := []framework.FlexboxSlot{
 		{
 			Element: design.ListItem(design.ListItemDetails{
@@ -35,7 +32,7 @@ func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin s
 
 			data.Action = "INSTALL_PLUGIN"
 			data.UUID = "a"
-			data.URL = fmt.Sprintf("https://cumcordplugins.github.io/Condom/%s", plugin.string)
+			data.URL = fmt.Sprintf("https://cumcordplugins.github.io/Condom/%s", plugin.URL)
 
 			for current <= rangeStart+rangeLength {
 				fmt.Println(current)
@@ -62,7 +59,7 @@ func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin s
 	})
 
 	app.Teleport(design.LayoutDocument(design.Header{
-		Title: plugin.Plugin.Name,
+		Title: plugin.Name,
 		Back:  back,
 	}, framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
