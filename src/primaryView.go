@@ -1,6 +1,9 @@
 package src
 
 import (
+	"os"
+
+	"github.com/Cumcord/impregnate/middle"
 	"github.com/Cumcord/impregnate/middle/api"
 	"github.com/lexisother/frenyard/design"
 	"github.com/lexisother/frenyard/framework"
@@ -13,6 +16,25 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 	}
 
 	slots := []framework.FlexboxSlot{}
+
+	warnings := middle.FindWarnings()
+	for _, v := range warnings {
+		fixAction := framework.ButtonBehavior(nil)
+		if v.Action == middle.URLAndCloseWarningID {
+			url := v.Parameter
+			fixAction = func() {
+				middle.OpenURL(url)
+				os.Exit(0)
+			}
+		}
+		slots = append(slots, framework.FlexboxSlot{
+			Element: design.InformationPanel(design.InformationPanelDetails{
+				Text:       v.Text,
+				ActionText: "FIX",
+				Action:     fixAction,
+			}),
+		})
+	}
 
 	pluginListItems := []design.ListItemDetails{}
 	for _, item := range pluginList {
