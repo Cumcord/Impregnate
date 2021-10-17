@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Cumcord/impregnate/middle"
 	"github.com/Cumcord/impregnate/src"
 	"github.com/lexisother/frenyard"
 	"github.com/lexisother/frenyard/design"
@@ -19,6 +20,7 @@ func main() {
 	wnd.SetSize(design.SizeWindow)
 	// Ok, now get it ready.
 	app := (&src.UpApplication{
+		Config:           middle.ReadConfig(),
 		MainContainer:    slideContainer,
 		Window:           wnd,
 		UpQueued:         make(chan func(), 16),
