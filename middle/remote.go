@@ -52,7 +52,6 @@ func CheckHealth() ReturnData {
 	data.UUID = "a"
 
 	for current <= rangeStart+rangeLength {
-		fmt.Println(current)
 		conn, err := websocket.Dial(fmt.Sprintf("ws://127.0.0.1:%d/cumcord", current), "", "http://localhost/")
 		current += 1
 		if err != nil {
@@ -71,6 +70,5 @@ func CheckHealth() ReturnData {
 		}
 	}
 
-	fmt.Println(finalData)
 	return finalData
 }
