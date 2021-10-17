@@ -9,6 +9,7 @@ import (
 // Code in this file was taken from CCUpdaterUI/main.go
 
 type UpApplication struct {
+	DiscordInstance   *middle.DiscordInstance
 	Config            middle.Config
 	MainContainer     *framework.UISlideTransitionContainer
 	Window            frenyard.Window

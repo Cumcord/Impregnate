@@ -59,7 +59,13 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 	})
 
 	app.CachedPrimaryView = design.LayoutDocument(design.Header{
-		Title:       "Plugins",
+		Title: "Plugins",
+		Back: func() {
+			app.CachedPrimaryView = nil
+			app.GSLeftwards()
+			app.ResetWithDiscordInstance(false, "computer://")
+		},
+		BackIcon:    design.BackIconID,
 		ForwardIcon: design.MenuIconID,
 		Forward: func() {
 			app.GSRightwards()
