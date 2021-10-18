@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 
 	"github.com/Cumcord/impregnate/middle/api"
@@ -45,46 +46,61 @@ type ReturnData struct {
 func CheckHealth() ReturnData {
 	rangeStart := 6463
 	rangeLength := 10
-	current := rangeStart
-	var data api.WebsocketData
-	var returnData ReturnData
 	var finalData ReturnData
 
-	data.Action = "GET_INFO"
-	data.UUID = "a"
+	results := make(chan ReturnData, rangeLength)
+	var wg sync.WaitGroup
+	for current := 10; current < rangeStart+rangeLength; current++ {
+		wg.Add(1)
+		go func(current int, results chan ReturnData) {
+			defer wg.Done()
+			checkHealthForPort(current, results)
+		}(current, results)
+	}
+	wg.Wait()
 
-	var Dialer = websocket.DefaultDialer
-	Dialer.HandshakeTimeout = time.Duration(time.Duration.Milliseconds(500))
-	for current <= rangeStart+rangeLength {
-		u := url.URL{
-			Scheme: "ws",
-			Host:   fmt.Sprintf("127.0.0.1:%d", current),
-			Path:   "/cumcord",
-		}
-		d, _ := json.Marshal(&data)
-		c, _, err := Dialer.Dial(u.String(), nil)
-		current += 1
-		if err != nil {
-			fmt.Println(err.Error())
+	for result := range results {
+		if result.Name == "CUMCORD_WEBSOCKET" {
+			finalData = result
+		} else {
 			continue
 		}
-		if err = c.WriteMessage(websocket.TextMessage, d); err != nil {
-			continue
-		}
-		_, message, err := c.ReadMessage()
-		if err != nil {
-			continue
-		}
-		defer c.Close()
-
-		json.Unmarshal([]byte(message), &returnData)
-
-		if returnData.Name == "CUMCORD_WEBSOCKET" {
-			finalData.Name = "CUMCORD_WEBSOCKET"
-			break
-		}
-		fmt.Println(returnData)
 	}
 
 	return finalData
+}
+
+func checkHealthForPort(port int, results chan<- ReturnData) {
+	var returnData ReturnData
+	var finalData ReturnData
+
+	var data api.WebsocketData
+	data.Action = "GET_INFO"
+	data.UUID = "a"
+	d, _ := json.Marshal(&data)
+
+	u := url.URL{
+		Scheme: "ws",
+		Host:   fmt.Sprintf("127.0.0.1:%d", port),
+		Path:   "/cumcord",
+	}
+	var Dialer = websocket.DefaultDialer
+	Dialer.HandshakeTimeout = time.Duration(time.Duration.Milliseconds(500))
+	c, _, err := Dialer.Dial(u.String(), nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if err = c.WriteMessage(websocket.TextMessage, d); err != nil {
+	}
+	_, message, err := c.ReadMessage()
+	if err != nil {
+	}
+	defer c.Close()
+
+	json.Unmarshal([]byte(message), &returnData)
+
+	if returnData.Name == "CUMCORD_WEBSOCKET" {
+		finalData.Name = "CUMCORD_WEBSOCKET"
+	}
+	results <- finalData
 }
