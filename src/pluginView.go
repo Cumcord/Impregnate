@@ -1,25 +1,41 @@
 package src
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/url"
 
 	"github.com/Cumcord/impregnate/middle/api"
+	"github.com/gorilla/websocket"
 	"github.com/lexisother/frenyard/design"
 	"github.com/lexisother/frenyard/framework"
-	"golang.org/x/net/websocket"
 )
 
-func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin api.Plugin) {
-	slots := []framework.FlexboxSlot{
-		{
+type ReturnData struct {
+	Status string `json:"status"`
+}
+
+func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin api.Plugin, warnings []framework.FlexboxSlot) {
+	slots := []framework.FlexboxSlot{}
+
+	if warnings != nil {
+		for _, warning := range warnings {
+			slots = append(slots, warning)
+		}
+	}
+
+	slots = append(slots,
+		framework.FlexboxSlot{
 			Element: design.ListItem(design.ListItemDetails{
 				Text: "hi",
 			}),
 		},
-		{
+		framework.FlexboxSlot{
 			Grow: 1,
 		},
-	}
+	)
+
+	slots = append(slots)
 
 	buttons := []framework.UILayoutElement{
 		design.ButtonAction(design.ThemeOkActionButton, "Install", func() {
@@ -28,7 +44,7 @@ func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin a
 			rangeLength := 10
 			current := rangeStart
 			var data api.WebsocketData
-			var returnData map[string]interface{}
+			var returnData ReturnData
 
 			data.Action = "INSTALL_PLUGIN"
 			data.UUID = "a"
@@ -36,20 +52,41 @@ func (app *UpApplication) ShowPluginView(back framework.ButtonBehavior, plugin a
 
 			for current <= rangeStart+rangeLength {
 				fmt.Println(current)
-				conn, err := websocket.Dial(fmt.Sprintf("ws://127.0.0.1:%d/cumcord", current), "", "http://localhost/")
+				u := url.URL{
+					Scheme: "ws",
+					Host:   fmt.Sprintf("127.0.0.1:%d", current),
+					Path:   "/cumcord",
+				}
+				d, _ := json.Marshal(&data)
+				c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 				current += 1
 				if err != nil {
 					continue
 				}
-				if err = websocket.JSON.Send(conn, &data); err != nil {
+				if err = c.WriteMessage(websocket.TextMessage, d); err != nil {
 					continue
 				}
-				if err = websocket.JSON.Receive(conn, &returnData); err != nil {
+				_, message, err := c.ReadMessage()
+				if err != nil {
 					continue
 				}
-				defer conn.Close()
-				fmt.Println(returnData)
-
+				defer c.Close()
+				json.Unmarshal([]byte(message), &returnData)
+				fmt.Println(returnData.Status)
+				if returnData.Status == "OK" {
+					app.ShowPluginView(back, plugin, nil)
+					break
+				} else {
+					warnings := []framework.FlexboxSlot{
+						{
+							Element: design.InformationPanel(design.InformationPanelDetails{
+								Text: "Something went wrong!",
+							}),
+						},
+					}
+					app.ShowPluginView(back, plugin, warnings)
+					break
+				}
 			}
 		}),
 	}

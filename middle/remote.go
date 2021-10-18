@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"time"
 
 	"github.com/Cumcord/impregnate/middle/api"
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 var baseURL = "https://cumcordplugins.github.io/Condom"
@@ -22,7 +24,7 @@ func FetchRemotePlugins() []api.Plugin {
 
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	json.Unmarshal([]byte(body), &plugins)
 
@@ -51,23 +53,37 @@ func CheckHealth() ReturnData {
 	data.Action = "GET_INFO"
 	data.UUID = "a"
 
+	var Dialer = websocket.DefaultDialer
+	Dialer.HandshakeTimeout = time.Duration(time.Duration.Milliseconds(500))
 	for current <= rangeStart+rangeLength {
-		conn, err := websocket.Dial(fmt.Sprintf("ws://127.0.0.1:%d/cumcord", current), "", "http://localhost/")
+		u := url.URL{
+			Scheme: "ws",
+			Host:   fmt.Sprintf("127.0.0.1:%d", current),
+			Path:   "/cumcord",
+		}
+		d, _ := json.Marshal(&data)
+		c, _, err := Dialer.Dial(u.String(), nil)
 		current += 1
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+		if err = c.WriteMessage(websocket.TextMessage, d); err != nil {
+			continue
+		}
+		_, message, err := c.ReadMessage()
 		if err != nil {
 			continue
 		}
-		if err = websocket.JSON.Send(conn, &data); err != nil {
-			continue
-		}
-		if err = websocket.JSON.Receive(conn, &returnData); err != nil {
-			continue
-		}
-		defer conn.Close()
+		defer c.Close()
+
+		json.Unmarshal([]byte(message), &returnData)
 
 		if returnData.Name == "CUMCORD_WEBSOCKET" {
 			finalData.Name = "CUMCORD_WEBSOCKET"
+			break
 		}
+		fmt.Println(returnData)
 	}
 
 	return finalData

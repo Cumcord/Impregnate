@@ -48,7 +48,7 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 				app.ShowPluginView(func() {
 					app.GSLeftwards()
 					app.ShowPrimaryView(pluginList)
-				}, localPlugin)
+				}, localPlugin, nil)
 			},
 		})
 	}
