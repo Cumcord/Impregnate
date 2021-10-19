@@ -40,7 +40,7 @@ func (app *UpApplication) ShowPreface() {
 			app.ShowInstanceFinder(discordLocations)
 		} else {
 			app.CachedPrimaryView = nil
-			app.ShowPrimaryView(pluginList)
+			app.ShowPrimaryView(pluginList, nil)
 		}
 	})
 }

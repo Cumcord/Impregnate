@@ -70,7 +70,7 @@ func GetInstance(channel string) (DiscordInstance, error) {
 	if _, err := os.Stat(instance.Path); err == nil {
 		return instance, nil
 	} else {
-		return instance, errors.New("Instance doesn't exist")
+		return instance, errors.New("instance doesn't exist")
 	}
 }
 
@@ -112,6 +112,6 @@ func NewDiscordInstance(path string) (*DiscordInstance, error) {
 	if _, err := os.Stat(instance.Path); err == nil {
 		return &instance, nil
 	} else {
-		return &instance, errors.New("Instance doesn't exist")
+		return &instance, errors.New("instance doesn't exist")
 	}
 }

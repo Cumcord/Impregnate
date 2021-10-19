@@ -43,6 +43,13 @@ type ReturnData struct {
 	Name string `json:"name"`
 }
 
+func FindPortAndRun(callback func(data ReturnData)) {
+	go func() {
+		data := CheckHealth()
+		callback(data)
+	}()
+}
+
 func CheckHealth() ReturnData {
 	rangeStart := 6463
 	rangeLength := 10

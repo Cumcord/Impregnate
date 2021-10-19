@@ -18,18 +18,18 @@ type Warning struct {
 	Parameter string
 }
 
-func FindWarnings() []Warning {
-	warnings := []Warning{}
+func FindWarnings(callback func([]Warning)) {
+	FindPortAndRun(func(health ReturnData) {
+		warnings := []Warning{}
 
-	health := CheckHealth()
+		if (ReturnData{}) == health {
+			warnings = append(warnings, Warning{
+				Text:      "Cumcord is not installed! (or Discord is not running)",
+				Action:    URLAndCloseWarningID,
+				Parameter: "https://cumcord.com",
+			})
+		}
 
-	if (ReturnData{}) == health {
-		warnings = append(warnings, Warning{
-			Text:      "Cumcord is not installed! (or Discord is not running)",
-			Action:    URLAndCloseWarningID,
-			Parameter: "https://cumcord.com",
-		})
-	}
-
-	return warnings
+		callback(warnings)
+	})
 }
