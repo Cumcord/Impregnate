@@ -53,6 +53,8 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 					progress(log)
 					decodedInjector, _ := base64.StdEncoding.DecodeString(middle.InjectorCode)
 					index.WriteString(string(decodedInjector))
+					log += "\n-- Complete; Restart your Discord client! --"
+					progress(log)
 				}, func() {
 					if _, err := os.Stat(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt")); err == nil {
 						app.MessageBox("Already Installed!", "Cumcord is already installed. Please start your client.", func() {
@@ -62,7 +64,7 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 					} else {
 						pluggedFile, _ := os.Create(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt"))
 						pluggedFile.WriteString("this file was added to indicate this was a cumcord installation. balls.")
-						app.MessageBox("Install Complete", "The installation has completed. Please restart Discord for the changes to take effect.", func() {
+						app.MessageBox("Install Complete", log, func() {
 							app.CachedPrimaryView = nil
 							app.ShowPrimaryView(pluginList)
 						})
