@@ -144,7 +144,7 @@ jobs:
 
       - name: Create release
         run: |
-          gh release delete ${{ env.VERSION }} -y
+          gh release delete ${{ env.VERSION }} -y || true
           gh release create ${{ env.VERSION }} -p -t "${{ env.NAME }}" -n "${{ github.event.head_commit.message }}" ${{ env.FILES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
