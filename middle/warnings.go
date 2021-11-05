@@ -1,8 +1,11 @@
 package middle
 
 import (
+	"io/ioutil"
+	"net/http"
 	"os"
 	"path"
+	"strings"
 )
 
 type WarningID int
@@ -23,18 +26,46 @@ type Warning struct {
 	Parameter string
 }
 
+// Initialize some variables for storing version checking information
+var remoteVersion string
+var hasAlreadyCheckedUpdate = false
+
+func checkUpdate() {
+	if !hasAlreadyCheckedUpdate {
+		hasAlreadyCheckedUpdate = true
+	} else {
+		return
+	}
+
+	res, _ := http.Get("https://raw.githubusercontent.com/Cumcord/Impregnate/master/middle/version.go")
+
+	data, _ := ioutil.ReadAll(res.Body)
+	remoteVersion = strings.Trim(string(data)[33:38], "\r\n")
+}
+
 func FindWarnings(config Config) []Warning {
 	warnings := []Warning{}
 
 	// health := CheckHealth()
-	_, err := os.Stat(path.Join(config.DiscordPath, "resources/app/plugged.txt"))
+	_, plugErr := os.Stat(path.Join(config.DiscordPath, "resources/app/plugged.txt"))
 
-	if err != nil {
+	if plugErr != nil {
 		// if (ReturnData{}) == health {
 		warnings = append(warnings, Warning{
 			Text:      "Cumcord is not installed! (or Discord is not running)",
 			Action:    InstallOrUpdatePackageWarningID,
 			Parameter: "https://cumcord.com",
+		})
+	}
+
+	if !hasAlreadyCheckedUpdate {
+		checkUpdate()
+	}
+	if remoteVersion != version {
+		warnings = append(warnings, Warning{
+			Text:      "A new version of Impregnate is available! (v" + remoteVersion + ")",
+			Action:    URLAndCloseWarningID,
+			Parameter: "https://github.com/Cumcord/Impregnate/releases",
 		})
 	}
 
