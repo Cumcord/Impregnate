@@ -26,7 +26,7 @@ func FindWarnings() []Warning {
 	if (ReturnData{}) == health {
 		warnings = append(warnings, Warning{
 			Text:      "Cumcord is not installed! (or Discord is not running)",
-			Action:    URLAndCloseWarningID,
+			Action:    InstallOrUpdatePackageWarningID,
 			Parameter: "https://cumcord.com",
 		})
 	}
