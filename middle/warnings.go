@@ -1,5 +1,10 @@
 package middle
 
+import (
+	"os"
+	"path"
+)
+
 type WarningID int
 
 const (
@@ -18,12 +23,14 @@ type Warning struct {
 	Parameter string
 }
 
-func FindWarnings() []Warning {
+func FindWarnings(config Config) []Warning {
 	warnings := []Warning{}
 
-	health := CheckHealth()
+	// health := CheckHealth()
+	_, err := os.Stat(path.Join(config.DiscordPath, "resources/app/plugged.txt"))
 
-	if (ReturnData{}) == health {
+	if err != nil {
+		// if (ReturnData{}) == health {
 		warnings = append(warnings, Warning{
 			Text:      "Cumcord is not installed! (or Discord is not running)",
 			Action:    InstallOrUpdatePackageWarningID,

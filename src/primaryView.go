@@ -2,10 +2,9 @@ package src
 
 import (
 	"encoding/base64"
-	"fmt"
-	"io/fs"
 	"os"
 	"path"
+	"time"
 
 	"github.com/Cumcord/impregnate/middle"
 	"github.com/Cumcord/impregnate/middle/api"
@@ -21,7 +20,7 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 
 	slots := []framework.FlexboxSlot{}
 
-	warnings := middle.FindWarnings()
+	warnings := middle.FindWarnings(app.Config)
 	for _, v := range warnings {
 		fixAction := framework.ButtonBehavior(nil)
 		if v.Action == middle.URLAndCloseWarningID {
@@ -34,29 +33,40 @@ func (app *UpApplication) ShowPrimaryView(pluginList []api.Plugin) {
 			fixAction = func() {
 				app.GSRightwards()
 
-				var resources fs.FileInfo
+				log := "-- Log started at " + time.Now().Format(time.RFC1123) + " --"
 				app.ShowWaiter("Installing...", func(progress func(string)) {
-					progress("Checking for app folder...")
-					fmt.Println(path.Join(app.Config.DiscordPath, "resources/app"))
-					resources, _ = os.Stat(path.Join(app.Config.DiscordPath, "resources/app"))
+					log += "\nChecking for app folder..."
+					progress(log)
+					resources, _ := os.Stat(path.Join(app.Config.DiscordPath, "resources/app"))
 					if resources != nil {
-						progress("Renaming app folder...")
+						log += "\nRenaming app folder..."
+						progress(log)
 						os.Rename(path.Join(app.Config.DiscordPath, "resources/app"), path.Join(app.Config.DiscordPath, "resources/plug"))
 					}
-					progress("App folder not found.")
 					os.Mkdir(path.Join(app.Config.DiscordPath, "resources/app"), 0755)
 					index, _ := os.Create(path.Join(app.Config.DiscordPath, "resources/app/index.js"))
 					packageJson, _ := os.Create(path.Join(app.Config.DiscordPath, "resources/app/package.json"))
-					pluggedFile, _ := os.Create(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt"))
-					progress("Writing package.json...")
+					log += "\nWriting package.json..."
+					progress(log)
 					packageJson.WriteString(`{"name":"plug","main":"index.js"}`)
-					progress("Writing index.js...")
+					log += "\nWriting index.js..."
+					progress(log)
 					decodedInjector, _ := base64.StdEncoding.DecodeString(middle.InjectorCode)
 					index.WriteString(string(decodedInjector))
-					progress("Writing plugged.txt...")
-					pluggedFile.WriteString("this file was added to indicate this was a cumcord installation. balls.")
 				}, func() {
-					fmt.Println(resources)
+					if _, err := os.Stat(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt")); err == nil {
+						app.MessageBox("Already Installed!", "Cumcord is already installed. Please start your client.", func() {
+							app.CachedPrimaryView = nil
+							app.ShowPrimaryView(pluginList)
+						})
+					} else {
+						pluggedFile, _ := os.Create(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt"))
+						pluggedFile.WriteString("this file was added to indicate this was a cumcord installation. balls.")
+						app.MessageBox("Install Complete", "The installation has completed. Please restart Discord for the changes to take effect.", func() {
+							app.CachedPrimaryView = nil
+							app.ShowPrimaryView(pluginList)
+						})
+					}
 				})
 			}
 		}
