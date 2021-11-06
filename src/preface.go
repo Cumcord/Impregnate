@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/Cumcord/impregnate/middle"
-	"github.com/Cumcord/impregnate/middle/api"
 	"github.com/lexisother/frenyard"
 	"github.com/lexisother/frenyard/design"
 	"github.com/lexisother/frenyard/framework"
@@ -22,7 +21,7 @@ func (app *UpApplication) ResetWithDiscordInstance(save bool, location string) {
 
 func (app *UpApplication) ShowPreface() {
 	var discordLocations []middle.DiscordInstance
-	var pluginList []api.Plugin
+	// var pluginList []api.Plugin
 	app.ShowWaiter("Loading...", func(progress func(string)) {
 		progress("Checking local installation...")
 		di, err := middle.NewDiscordInstance(app.Config.DiscordPath)
@@ -31,8 +30,8 @@ func (app *UpApplication) ShowPreface() {
 		} else {
 			fmt.Printf("Failed check: %s\n", err.Error())
 		}
-		progress("Fetching remote plugins...")
-		pluginList = middle.FetchRemotePlugins()
+		// progress("Fetching remote plugins...")
+		// pluginList = middle.FetchRemotePlugins()
 		progress("Not configured ; Autodetecting Discord locations...")
 		discordLocations = middle.GetChannels()
 	}, func() {
@@ -40,7 +39,7 @@ func (app *UpApplication) ShowPreface() {
 			app.ShowInstanceFinder(discordLocations)
 		} else {
 			app.CachedPrimaryView = nil
-			app.ShowPrimaryView(pluginList)
+			app.ShowPrimaryView()
 		}
 	})
 }

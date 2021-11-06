@@ -3,8 +3,6 @@ package middle
 import (
 	"io/ioutil"
 	"net/http"
-	"os"
-	"path"
 	"strings"
 )
 
@@ -45,18 +43,6 @@ func checkUpdate() {
 
 func FindWarnings(config Config) []Warning {
 	warnings := []Warning{}
-
-	// health := CheckHealth()
-	_, plugErr := os.Stat(path.Join(config.DiscordPath, "resources/app/plugged.txt"))
-
-	if plugErr != nil {
-		// if (ReturnData{}) == health {
-		warnings = append(warnings, Warning{
-			Text:      "Cumcord is not installed! (or Discord is not running)",
-			Action:    InstallOrUpdatePackageWarningID,
-			Parameter: "https://cumcord.com",
-		})
-	}
 
 	if !hasAlreadyCheckedUpdate {
 		checkUpdate()
