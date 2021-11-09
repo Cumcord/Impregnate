@@ -66,13 +66,22 @@ jobs:
             - name: Update executable
               run: |
                   chmod +x impregnate
-                  mv impregnate impregnate.MacOS
+
+            - name: Generate MacOS bundle
+              run: |
+                  mkdir -p Impregnate.app/Contents/MacOS
+                  mkdir -p Impregnate.app/Contents/Resources
+                  wget https://nova-vps.ml/~alyxia/static/Info.plist -O Impregnate.app/Contents/Info.plist
+                  mv impregnate Impregnate.app/Contents/MacOS/impregnate
+                  wget https://nova-vps.ml/~alyxia/static/icon.icns -O Impregnate.app/Contents/Resources/icon.icns
+                  zip -r Impregnate.MacOS.zip Impregnate.app
+                  mv Impregnate.MacOS.zip impregnate.MacOS.zip
 
             - name: Upload artifact
               uses: actions/upload-artifact@v2
               with:
                   name: impregnate-macos
-                  path: impregnate.MacOS
+                  path: impregnate.MacOS.zip
 
     build-windows:
         runs-on: windows-latest
@@ -156,5 +165,5 @@ jobs:
                   body_path: .github/release_body_template.md
                   files: |
                       linux/impregnate.Linux
-                      macos/impregnate.MacOS
+                      macos/impregnate.MacOS.zip
                       windows/impregnate.exe
