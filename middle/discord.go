@@ -42,13 +42,13 @@ func GetInstance(channel string) (DiscordInstance, error) {
 
 	switch OS := runtime.GOOS; OS {
 	case "darwin":
-		instance.Path = filepath.Join("/Applications", channelString+".app", "Contents")
+		instance.Path = filepath.Join("/Applications", channelString+".app", "Contents", "Resources")
 	case "windows":
 		starterPath := filepath.Join(os.Getenv("localappdata"), channelString, "/")
 		filepath.Walk(starterPath, func(path string, _ fs.FileInfo, _ error) error {
 
 			if strings.HasPrefix(filepath.Base(path), "app-") {
-				instance.Path = path
+				instance.Path = filepath.Join(path, "resources")
 			}
 
 			return nil
@@ -61,7 +61,7 @@ func GetInstance(channel string) (DiscordInstance, error) {
 			if _, err := os.Stat(joinedPath); err == nil {
 				possiblepath, _ := filepath.EvalSymlinks(joinedPath)
 				if possiblepath != joinedPath {
-					instance.Path = filepath.Join(possiblepath, "..")
+					instance.Path = filepath.Join(possiblepath, "..", "resources")
 				}
 			}
 		}
@@ -94,20 +94,7 @@ func NewDiscordInstance(path string) (*DiscordInstance, error) {
 		Channel: "Unknown",
 	}
 
-	switch OS := runtime.GOOS; OS {
-	case "darwin":
-		instance.Path = filepath.Join(path, "Contents")
-	case "windows":
-		filepath.Walk(path, func(item string, _ fs.FileInfo, _ error) error {
-			baseItem := filepath.Base(item)
-			if strings.HasPrefix(baseItem, "app-") {
-				instance.Path = item
-			}
-			return nil
-		})
-	default:
-		instance.Path = path
-	}
+	instance.Path = path
 
 	if _, err := os.Stat(instance.Path); err == nil {
 		return &instance, nil

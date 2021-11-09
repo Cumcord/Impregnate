@@ -18,7 +18,7 @@ func (app *UpApplication) ShowPrimaryView() {
 	}
 
 	var installStatus string
-	if _, installedOrNot := os.Stat(path.Join(app.Config.DiscordPath, "resources/app/plugged.txt")); installedOrNot == nil {
+	if _, installedOrNot := os.Stat(path.Join(app.Config.DiscordPath, "app/plugged.txt")); installedOrNot == nil {
 		installStatus = "installed!"
 	} else {
 		installStatus = "not installed."

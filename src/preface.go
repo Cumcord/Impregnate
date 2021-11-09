@@ -47,14 +47,16 @@ func (app *UpApplication) ShowPreface() {
 func (app *UpApplication) ShowInstanceFinder(locations []middle.DiscordInstance) {
 	suggestSlots := []framework.FlexboxSlot{}
 	for _, location := range locations {
+		channel := location.Channel
+		path := location.Path
 		suggestSlots = append(suggestSlots, framework.FlexboxSlot{
 			Element: design.ListItem(design.ListItemDetails{
 				Icon:    design.DirectoryIconID,
-				Text:    location.Channel,
-				Subtext: location.Path,
+				Text:    channel,
+				Subtext: path,
 				Click: func() {
 					app.GSRightwards()
-					app.ResetWithDiscordInstance(true, location.Path)
+					app.ResetWithDiscordInstance(true, path)
 				},
 			}),
 			RespectMinimumSize: true,
