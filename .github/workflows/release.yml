@@ -101,7 +101,7 @@ jobs:
             - name: Install Windows dependencies
               shell: msys2 {0}
               run: |
-                  pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-go
+                  pacman -S --noconfirm git mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2 mingw-w64-x86_64-go
                   export GOROOT=/mingw64/lib/go
                   export GOPATH=/mingw64
 
@@ -111,12 +111,14 @@ jobs:
                   export GOROOT=/mingw64/lib/go
                   export GOPATH=/mingw64
                   go get -v
+                  go install github.com/tc-hib/go-winres@latest
 
             - name: Build
               shell: msys2 {0}
               run: |
                   export GOROOT=/mingw64/lib/go
                   export GOPATH=/mingw64
+                  go-winres make --product-version "git-tag"
                   CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -v -tags static -ldflags "-s -w -H=windowsgui"
 
             - name: Upload artifact

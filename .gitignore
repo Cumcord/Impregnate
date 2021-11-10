@@ -25,3 +25,6 @@ impregnate
 /Godeps/
 
 # End of https://www.toptal.com/developers/gitignore/api/go
+
+# specific to this project
+*.syso
