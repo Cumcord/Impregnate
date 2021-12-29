@@ -20,7 +20,7 @@ func GetInstance(channel string) (DiscordInstance, error) {
 	channelString := "Discord"
 
 	if runtime.GOOS == "linux" {
-		channelString = strings.ToLower(channelString)
+		channelString = channelString
 	}
 
 	// Generate channel strings (e.g discord-canary, DiscordCanary, Discord Canary)
@@ -31,7 +31,7 @@ func GetInstance(channel string) (DiscordInstance, error) {
 		case "windows":
 			channelString = channelString + channel
 		default: // Linux and BSD are basically the same thing
-			channelString = strings.ToLower(channelString + "-" + channel)
+			channelString = channelString + "-" + channel
 		}
 	}
 
@@ -54,14 +54,17 @@ func GetInstance(channel string) (DiscordInstance, error) {
 			return nil
 		})
 	default: // Linux and BSD are *still* basically the same thing
+		channels := []string{channelString, strings.ToLower(channelString)}
 		path := os.Getenv("PATH")
 
-		for _, pathItem := range strings.Split(path, ":") {
-			joinedPath := filepath.Join(pathItem, channelString)
-			if _, err := os.Stat(joinedPath); err == nil {
-				possiblepath, _ := filepath.EvalSymlinks(joinedPath)
-				if possiblepath != joinedPath {
-					instance.Path = filepath.Join(possiblepath, "..", "resources")
+		for _, channel := range channels {
+			for _, pathItem := range strings.Split(path, ":") {
+				joinedPath := filepath.Join(pathItem, channel)
+				if _, err := os.Stat(joinedPath); err == nil {
+					possiblepath, _ := filepath.EvalSymlinks(joinedPath)
+					if possiblepath != joinedPath {
+						instance.Path = filepath.Join(possiblepath, "..", "resources")
+					}
 				}
 			}
 		}
