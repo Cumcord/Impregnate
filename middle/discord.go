@@ -19,10 +19,6 @@ type DiscordInstance struct {
 func GetInstance(channel string) (DiscordInstance, error) {
 	channelString := "Discord"
 
-	if runtime.GOOS == "linux" {
-		channelString = channelString
-	}
-
 	// Generate channel strings (e.g discord-canary, DiscordCanary, Discord Canary)
 	if channel != "Stable" {
 		switch os := runtime.GOOS; os {
