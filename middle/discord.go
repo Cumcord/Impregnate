@@ -68,6 +68,10 @@ func GetInstance(channel string) (DiscordInstance, error) {
 				}
 			}
 		}
+
+		if instance.Path == "" && channel == "Stable" {
+			instance.Path = "/var/lib/flatpak/app/com.discordapp.Discord/x86_64/stable/active/files/discord/resources/"
+		}
 	}
 
 	if _, err := os.Stat(instance.Path); err == nil {
