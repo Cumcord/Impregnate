@@ -1,3 +1,3 @@
 package middle
 
-const version = "1.2.5"
+const version = "1.2.6"
