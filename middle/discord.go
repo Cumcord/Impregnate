@@ -78,7 +78,7 @@ func GetInstance(channel string) (DiscordInstance, error) {
 }
 
 func GetChannels() []DiscordInstance {
-	possible := []string{"Stable", "PTB", "Canary"}
+	possible := []string{"Stable", "PTB", "Canary", "Development"}
 	var channels []DiscordInstance
 
 	for _, channel := range possible {
