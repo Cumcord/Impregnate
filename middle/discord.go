@@ -4,6 +4,7 @@ package middle
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 )
 
 type DiscordInstance struct {
+	// Path to "resources" directory
 	Path    string
 	Channel string
 }
@@ -93,15 +95,25 @@ func GetChannels() []DiscordInstance {
 
 func NewDiscordInstance(path string) (*DiscordInstance, error) {
 	instance := DiscordInstance{
-		Path:    "",
+		Path:    path,
 		Channel: "Unknown",
 	}
 
-	instance.Path = path
-
-	if _, err := os.Stat(instance.Path); err == nil {
+	if _, err := os.Stat(filepath.Join(instance.Path, "app.asar")); err == nil {
 		return &instance, nil
 	} else {
-		return &instance, errors.New("Instance doesn't exist")
+		return nil, errors.New("Instance doesn't exist")
 	}
 }
+
+func CheckDiscordLocation(dir string) *DiscordInstance {
+	if BrowserVFSLocationReal(dir) {
+		discordInstance, err := NewDiscordInstance(dir)
+		if err == nil {
+			fmt.Print("Discord instance found at " + dir + "\n")
+			return discordInstance
+		}
+	}
+	return nil
+}
+
