@@ -13,9 +13,9 @@ import (
 )
 
 type DiscordInstance struct {
+	// Path to "resources" directory
 	Path    string
 	Channel string
-	Valid   bool
 }
 
 func GetInstance(channel string) (DiscordInstance, error) {
@@ -36,7 +36,6 @@ func GetInstance(channel string) (DiscordInstance, error) {
 	instance := DiscordInstance{
 		Path:    "",
 		Channel: channel,
-		Valid:   false,
 	}
 
 	switch OS := runtime.GOOS; OS {
@@ -96,17 +95,14 @@ func GetChannels() []DiscordInstance {
 
 func NewDiscordInstance(path string) (*DiscordInstance, error) {
 	instance := DiscordInstance{
-		Path:    "",
+		Path:    path,
 		Channel: "Unknown",
-		Valid:   false,
 	}
-
-	instance.Path = path
 
 	if _, err := os.Stat(filepath.Join(instance.Path, "app.asar")); err == nil {
 		return &instance, nil
 	} else {
-		return &instance, errors.New("Instance doesn't exist")
+		return nil, errors.New("Instance doesn't exist")
 	}
 }
 
@@ -115,14 +111,9 @@ func CheckDiscordLocation(dir string) *DiscordInstance {
 		discordInstance, err := NewDiscordInstance(dir)
 		if err == nil {
 			fmt.Print("Discord instance found at " + dir + "\n")
-			if _, err := os.Stat(discordInstance.Path); err == nil {
-				discordInstance.Valid = true
-			}
+			return discordInstance
 		}
 	}
-
-	return &DiscordInstance{
-		Path: dir,
-	}
+	return nil
 }
 

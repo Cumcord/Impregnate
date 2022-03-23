@@ -1,15 +1,22 @@
 package middle
 
-func DiscordFinderVFSList(vfsPath string) []*DiscordInstance {
-	vfsEntries := []*DiscordInstance{}
+// A BrowserLocation with the output of CheckDiscordLocation.
+// The CCUpdaterUI code put the necessary information into GameInstance but Impregnate doesn't do that.
+// So we use this instead to get the same data.
+type FinderLocation struct {
+	BrowserLocation
+	Instance *DiscordInstance
+}
+
+func DiscordFinderVFSList(vfsPath string) []FinderLocation {
+	vfsEntries := []FinderLocation{}
 	for _, fi := range BrowserVFSList(vfsPath) {
 		if fi.Dir {
-			// cdl, err := NewDiscordInstance(fi.Location)
-			cdl := CheckDiscordLocation(fi.Location)
-			// if err == nil {
-			cdl.Path = fi.Location
-			vfsEntries = append(vfsEntries, cdl)
-			// }
+			finderLocation := FinderLocation {
+				BrowserLocation: fi,
+				Instance: CheckDiscordLocation(fi.Location),
+			}
+			vfsEntries = append(vfsEntries, finderLocation)
 		}
 	}
 	return vfsEntries

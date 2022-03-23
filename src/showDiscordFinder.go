@@ -10,7 +10,7 @@ import (
 )
 
 func (app *UpApplication) ShowDiscordFinder(back framework.ButtonBehavior, vfsPath string) {
-	var vfsList []*middle.DiscordInstance
+	var vfsList []middle.FinderLocation
 
 	app.ShowWaiter("Reading", func(progress func(string)) {
 		progress("Scanning to find all of the context in:\n" + vfsPath)
@@ -19,7 +19,7 @@ func (app *UpApplication) ShowDiscordFinder(back framework.ButtonBehavior, vfsPa
 		items := []design.ListItemDetails{}
 
 		for _, v := range vfsList {
-			thisLocation := v.Path
+			thisLocation := v.Location
 			ild := design.ListItemDetails{
 				Icon: design.DirectoryIconID,
 				Text: filepath.Base(thisLocation),
@@ -31,17 +31,17 @@ func (app *UpApplication) ShowDiscordFinder(back framework.ButtonBehavior, vfsPa
 					app.ShowDiscordFinder(back, vfsPath)
 				}, thisLocation)
 			}
-			if v.Valid {
+			if v.Instance != nil {
 				ild.Click = func() {
 					app.GSRightwards()
 					app.ResetWithDiscordInstance(true, thisLocation)
 				}
-				ild.Text = "Discord " + v.Channel
+				ild.Text = "Discord " + v.Instance.Channel
 				ild.Subtext = thisLocation
 				ild.Icon = design.GameIconID
-			} else if v.Path != "" {
-				ild.Text = v.Path
-				ild.Subtext = v.Path
+			} else if v.Drive != "" {
+				ild.Text = v.Drive
+				ild.Subtext = v.Location
 				ild.Icon = design.DriveIconID
 			}
 			items = append(items, ild)
